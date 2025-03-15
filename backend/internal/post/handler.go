@@ -11,9 +11,9 @@ import (
 
 type Post interface {
 	GetPosts(w http.ResponseWriter, r *http.Request)
-	// Post(w http.ResponseWriter, r *http.Request)
-	// GetPosts(w http.ResponseWriter, r *http.Request)
-	// React(w http.ResponseWriter, r *http.Request)
+	CreatePost(w http.ResponseWriter, r *http.Request)
+	GetPost(w http.ResponseWriter, r *http.Request)
+	React(w http.ResponseWriter, r *http.Request)
 }
 
 type post struct {
