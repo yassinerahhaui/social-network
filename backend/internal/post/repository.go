@@ -61,7 +61,7 @@ func (p *post) Repo_GetAll(ctx context.Context, id int) (posts []entity.Post, er
 		        post.group_id IS NULL)
 		WHERE
 			    (post.group_id IS NOT NULL AND gm.member_id IS NOT NULL)
-		    OR 
+		    OR
 		    	(post.group_id IS NULL AND follow.follower_id = $1)
 			OR
 				(post.status = 2);`)
@@ -145,6 +145,6 @@ func (p *post) Repo_React(ctx context.Context, user_id int, react entity.Reactio
 	if err != nil {
 		return
 	}
-	_, err = prep.ExecContext(ctx, user_id, react.ID, react.Status)
+	_, err = prep.ExecContext(ctx, user_id, react.PostID, react.Status)
 	return
 }

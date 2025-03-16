@@ -1,6 +1,7 @@
 package entity
 
 type Reaction struct {
-	ID     int    `json:"id"`
-	Status string `json:"status"`
+	CommentID int    `json:"comment"`
+	PostID    int    `json:"post"`
+	Status    string `json:"status"`
 }

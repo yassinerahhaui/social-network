@@ -17,20 +17,14 @@ type comment struct {
 
 type Comment interface {
 	GetAll(w http.ResponseWriter, r *http.Request)
-	GetOne(w http.ResponseWriter, r *http.Request)
 	Create(w http.ResponseWriter, r *http.Request)
 	Vote(w http.ResponseWriter, r *http.Request)
 }
 
-/*               app     */
 func NewComment(dep *config.Dependencies) Comment {
 	return &comment{db: dep.DB, loger: *dep.Loger, Hub: dep.Hub}
 }
 
 func (c *comment) GetAll(w http.ResponseWriter, r *http.Request) {}
-
 func (c *comment) Create(w http.ResponseWriter, r *http.Request) {}
-
-func (c *comment) GetOne(w http.ResponseWriter, r *http.Request) {}
-
-func (c *comment) Vote(w http.ResponseWriter, r *http.Request) {}
+func (c *comment) Vote(w http.ResponseWriter, r *http.Request)   {}
