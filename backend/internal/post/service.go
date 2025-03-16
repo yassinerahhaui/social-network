@@ -51,7 +51,7 @@ func (p *post) Service_CreateOne(w http.ResponseWriter, r *http.Request) {
 
 func (p *post) Service_React(w http.ResponseWriter, r *http.Request) {
 	id := r.Context().Value(entity.ContextID).(int)
-	react := entity.PostReaction{}
+	react := entity.Reaction{}
 	err := json.NewDecoder(r.Body).Decode(&react)
 	if err != nil {
 		return

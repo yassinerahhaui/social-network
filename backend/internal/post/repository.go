@@ -74,7 +74,7 @@ func (p *post) Repo_GetAll(ctx context.Context, id int) (posts []entity.Post, er
 	}
 	for res.Next() {
 		post := entity.Post{}
-		err := res.Scan(&post.ID, &post.UserID, &post.Title, &post.Content, &post.Image, &post.GroupID, post.UserName)
+		err := res.Scan(&post.ID, &post.UserID, &post.Title, &post.Content, &post.Image, &post.GroupID, &post.UserName)
 		if err != nil {
 			continue
 		}
@@ -128,7 +128,7 @@ func (p *post) Repo_CreatePost(ctx context.Context, user_id int, post entity.Pos
 	return
 }
 
-func (p *post) Repo_React(ctx context.Context, user_id int, react entity.PostReaction) (err error) {
+func (p *post) Repo_React(ctx context.Context, user_id int, react entity.Reaction) (err error) {
 	prep, err := p.db.PrepareContext(ctx, `SELECT $1 as user_id, post.id, $2 as status
 		FROM posts AS post
 		LEFT JOIN follows AS follow 
@@ -142,7 +142,9 @@ func (p *post) Repo_React(ctx context.Context, user_id int, react entity.PostRea
 			AND post.id = $3
 		OR
 			post.status = 2`)
-	if err != nil {return}
+	if err != nil {
+		return
+	}
 	_, err = prep.ExecContext(ctx, user_id, react.ID, react.Status)
 	return
 }
