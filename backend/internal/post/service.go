@@ -28,15 +28,20 @@ func (p *post) Service_GetOne(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	post, err := p.Repo_GetOne(r.Context(), id, post_id)
-	if err != nil {
+	if p.Repo_UserCanPost(r.Content, id, post_id) {
+		post, err := p.Repo_GetOne(r.Context(), post_id)
+		if err != nil {
+			return
+		}
+		data, err := json.Marshal(post)
+		if err != nil {
+			return
+		}
+		w.Write(data)
+	} else {
+		w.Write([]byte("{error:404}"))
 		return
 	}
-	data, err := json.Marshal(post)
-	if err != nil {
-		return
-	}
-	w.Write(data)
 }
 
 func (p *post) Service_CreateOne(w http.ResponseWriter, r *http.Request) {

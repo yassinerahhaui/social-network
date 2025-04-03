@@ -17,27 +17,20 @@ func (p *post) Repo_UserCanPost(ctx context.Context, id, postid int) int {
 		LEFT JOIN group_members AS gm ON gm.group_id = post.group_id
 			AND gm.member_id = $1
 		WHERE
-		    (
-		        post.group_id IS NOT NULL
-		        AND gm.member_id IS NOT NULL
-		        AND post.id = $2
-		    )
-		    OR (
-		        post.group_id IS NULL
-		        AND follow.follower_id = $1
-		        AND post.id = $2
-		    );`
+		    (post.group_id IS NOT NULL AND gm.member_id IS NOT NULL AND post.id = $2)
+		    OR (post.group_id IS NULL AND follow.follower_id = $1 AND post.id = $2)
+			OR (post.status = 2 AND post.id = $2);`
 	smtp, err := p.db.PrepareContext(ctx, query)
 	if err != nil {
-		return 500
+		return false
 	}
 	row := smtp.QueryRowContext(ctx)
 	var res int
 	err = row.Scan(&res)
 	if err != nil {
-		return 500
+		return false
 	} else {
-		return 200
+		return true
 	}
 }
 
@@ -83,7 +76,7 @@ func (p *post) Repo_GetAll(ctx context.Context, id int) (posts []entity.Post, er
 	return
 }
 
-func (p *post) Repo_GetOne(ctx context.Context, user_id, post_id int) (post entity.Post, err error) {
+func (p *post) Repo_GetOne(ctx context.Context, post_id int) (post entity.Post, err error) {
 	prep, err := p.db.PrepareContext(ctx, `SELECT
 		    post.id,
 		    post.title,
@@ -94,26 +87,20 @@ func (p *post) Repo_GetOne(ctx context.Context, user_id, post_id int) (post enti
 		    user.nickname AS creator
 		FROM posts AS post 
 		INNER JOIN users AS user ON user.id = post.user_id
-		LEFT JOIN group_members AS gm ON gm.group_id=post.group_id AND gm.member_id = $1
-		LEFT JOIN follows AS follow ON follow.followed_id = post.user_id AND follow.follower_id = 1
-		WHERE
-		    (post.group_id IS NOT NULL AND gm.member_id = $1 AND post.id=$2)
-		    OR 
-		    (post.group_id IS NULL AND follow.follower_id = $1 AND post.id=$2);`)
+		WHERE (post.id=$1);`)
 	if err != nil {
 		return
 	}
-	res := prep.QueryRowContext(ctx, user_id, post_id)
+	res := prep.QueryRowContext(ctx, post_id)
 	err = res.Scan(&post.ID, &post.Title, &post.Content, &post.Image, &post.Status, &post.GroupID, &post.UserName)
 	return
 }
 
 func (p *post) Repo_CreatePost(ctx context.Context, user_id int, post entity.Post) (err error) {
 	prep, err := p.db.PrepareContext(ctx, `INSERT into posts
-		SELECT $1, $2, $3, $4, $5, $6
-		FROM users AS user
-		LEFT JOIN group_members AS gm ON gm.group_id = $5 AND gm.member_id = $1
-		WHERE user.id = $1 AND $2 NOT NULL AND $3 NOT NULL AND status NOT NULL`)
+		(user_id, title, content, image, group_id, status)
+	VALUES
+		($1, $2, $3, $4, $5, $6)`)
 	if err != nil {
 		return
 	}
@@ -129,19 +116,10 @@ func (p *post) Repo_CreatePost(ctx context.Context, user_id int, post entity.Pos
 }
 
 func (p *post) Repo_React(ctx context.Context, user_id int, react entity.Reaction) (err error) {
-	prep, err := p.db.PrepareContext(ctx, `SELECT $1 as user_id, post.id, $2 as status
-		FROM posts AS post
-		LEFT JOIN follows AS follow 
-		  ON follow.followed_id = post.user_id AND follow.follower_id = $1
-		LEFT JOIN group_members AS gm 
-		  ON gm.group_id = post.group_id AND gm.member_id = $1
-		WHERE 
-		  	((post.group_id IS NOT NULL AND gm.member_id IS NOT NULL)
-		   		OR 
-			(post.group_id IS NULL AND follow.follower_id = $1))
-			AND post.id = $3
-		OR
-			post.status = 2`)
+	prep, err := p.db.PrepareContext(ctx, `INSERT INTO engagements
+			(user_id, post_id, status)
+		VALUES
+			($1, $2, $3)`)
 	if err != nil {
 		return
 	}
