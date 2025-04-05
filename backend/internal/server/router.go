@@ -52,6 +52,21 @@ func (app *App) createRoutes() []Route {
 			handler: ping,
 			Role:    Auth,
 		},
+		{
+			Path:    "/api/post/create",
+			handler: app.CreatePost,
+			Role:    Auth,
+		},
+		{
+			Path:    "/api/post/{id}",
+			handler: app.GetPost,
+			Role:    Auth,
+		},
+		{
+			Path:    "/api/post/react",
+			handler: app.ReactPost,
+			Role:    Auth,
+		},
 	}
 }
 

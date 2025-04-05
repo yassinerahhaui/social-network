@@ -13,7 +13,7 @@ type Post interface {
 	GetPosts(w http.ResponseWriter, r *http.Request)
 	CreatePost(w http.ResponseWriter, r *http.Request)
 	GetPost(w http.ResponseWriter, r *http.Request)
-	React(w http.ResponseWriter, r *http.Request)
+	ReactPost(w http.ResponseWriter, r *http.Request)
 }
 
 type post struct {
@@ -38,10 +38,18 @@ func Newpost(dep *config.Dependencies) Post {
 	return &post{db: dep.DB, loger: *dep.Loger, Hub: dep.Hub}
 }
 
-func (p *post) GetPosts(w http.ResponseWriter, r *http.Request) {}
+func (p *post) GetPosts(w http.ResponseWriter, r *http.Request) {
+	p.Service_GetAll(w, r)
+}
 
-func (p *post) React(w http.ResponseWriter, r *http.Request) {}
+func (p *post) ReactPost(w http.ResponseWriter, r *http.Request) {
+	p.Service_React(w, r)
+}
 
-func (p *post) CreatePost(w http.ResponseWriter, r *http.Request) {}
+func (p *post) CreatePost(w http.ResponseWriter, r *http.Request) {
+	p.Service_CreateOne(w, r)
+}
 
-func (p *post) GetPost(w http.ResponseWriter, r *http.Request) {}
+func (p *post) GetPost(w http.ResponseWriter, r *http.Request) {
+	p.Service_GetOne(w, r)
+}

@@ -6,6 +6,7 @@ import (
 	"socialNetwork/internal/chat"
 	"socialNetwork/internal/comment"
 	"socialNetwork/internal/group"
+	"socialNetwork/internal/post"
 	"socialNetwork/internal/user"
 	"socialNetwork/pkg/config"
 	"socialNetwork/pkg/database"
@@ -20,6 +21,7 @@ type App struct {
 	chat.Chat
 	group.Group
 	user.User
+	post.Post
 	Loger *loger.CstmLogger
 }
 
@@ -31,6 +33,7 @@ func NewApp(dep *config.Dependencies) *App {
 		Chat:           chat.NewChat(dep),
 		Group:          group.NewGroup(dep /* we need to add the hub to group*/),
 		User:           user.NewUser(dep /* we need to add the hub*/),
+		Post:           post.Newpost(dep),
 	}
 }
 

@@ -19,12 +19,13 @@ func (p *post) Repo_UserCanPost(ctx context.Context, id, postid int) bool {
 		WHERE
 		    (post.group_id IS NOT NULL AND gm.member_id IS NOT NULL AND post.id = $2)
 		    OR (post.group_id IS NULL AND follow.follower_id = $1 AND post.id = $2)
-			OR (post.status = 2 AND post.id = $2);`
+			OR (post.status = 2 AND post.id = $2)
+			OR (post.user_id = $1);`
 	smtp, err := p.db.PrepareContext(ctx, query)
 	if err != nil {
 		return false
 	}
-	row := smtp.QueryRowContext(ctx)
+	row := smtp.QueryRowContext(ctx, id, postid)
 	var res int
 	err = row.Scan(&res)
 	if err != nil {
