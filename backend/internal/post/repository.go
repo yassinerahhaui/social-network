@@ -7,7 +7,7 @@ import (
 	"socialNetwork/entity"
 )
 
-func (p *post) Repo_UserCanPost(ctx context.Context, id, postid int) int {
+func (p *post) Repo_UserCanPost(ctx context.Context, id, postid int) bool {
 	query := `SELECT
 		    post.id
 		FROM

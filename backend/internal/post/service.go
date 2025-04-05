@@ -28,7 +28,7 @@ func (p *post) Service_GetOne(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	if p.Repo_UserCanPost(r.Content, id, post_id) {
+	if p.Repo_UserCanPost(r.Context(), id, post_id) {
 		post, err := p.Repo_GetOne(r.Context(), post_id)
 		if err != nil {
 			return
