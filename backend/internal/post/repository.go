@@ -58,7 +58,9 @@ func (p *post) Repo_GetAll(ctx context.Context, id int) (posts []entity.Post, er
 		    OR
 		    	(post.group_id IS NULL AND follow.follower_id = $1)
 			OR
-				(post.status = 2);`)
+				(post.status = 2)
+			OR
+				(post.userid = $1);`)
 	if err != nil {
 		return
 	}
