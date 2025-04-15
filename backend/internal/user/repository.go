@@ -332,7 +332,7 @@ func (u *user) GroupContainsMember(groupId, userId int) (bool, error) {
 		if err == sql.ErrNoRows {
 			return false, nil
 		}
-		return false, errors.New(fmt.Sprintf("Error checking group membership: %v", err))
+		return false, fmt.Errorf("error checking group membership: %v", err)
 	}
 
 	return true, nil
@@ -340,9 +340,57 @@ func (u *user) GroupContainsMember(groupId, userId int) (bool, error) {
 
 /*___________ THOS FUNC USED FOR FOLLOWERS ___________*/
 // this function is used to get followers by user id
-// func (r *user) GetFollowers(id uint) ([]entity.User, error) {}
+func (u *user) GetFollowers(ctx context.Context, id int) ([]entity.User, error) {
+	query := `
+		SELECT users.nickname, users.avatar 
+		FROM users
+		INNER JOIN follows ON users.id = follows.follower_id
+		WHERE follows.followed_id = $1`
+		
+	rows, err := u.db.QueryContext(ctx, query, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var followers []entity.User
+	for rows.Next() {
+		var follower entity.User
+		if err := rows.Scan(&follower.Nickname, &follower.Avatar); err != nil {
+			return nil, err
+		}
+		followers = append(followers, follower)
+	}
+
+	return followers, nil
+}
+
+
 // this function is used to get following by user id
-// func (r *user) GetFollowing(id uint) ([]entity.User, error) {}
+func (u *user) GetFollowing(ctx context.Context, id int) ([]entity.User, error) {
+	query := `
+		SELECT users.nickname, users.avatar 
+		FROM users
+		INNER JOIN follows ON users.id = follows.followed_id 
+		WHERE follows.follower_id = $1`
+		
+	rows, err := u.db.QueryContext(ctx, query, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var followers []entity.User
+	for rows.Next() {
+		var follower entity.User
+		if err := rows.Scan(&follower.Nickname, &follower.Avatar); err != nil {
+			return nil, err
+		}
+		followers = append(followers, follower)
+	}
+
+	return followers, nil
+}
 
 // this function is used to follow user
 // func (r *user) Follow(follower, following uint) error {}

@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -29,7 +28,7 @@ type User interface {
 	Logout(w http.ResponseWriter, r *http.Request)
 	Profile(w http.ResponseWriter, r *http.Request)
 	Follow(w http.ResponseWriter, r *http.Request)
-	Followers(w http.ResponseWriter, r *http.Request)
+	FollowersAndFollowed(w http.ResponseWriter, r *http.Request)
 	DeleteUserByNickName(Nickname string) error
 	IsUserExist(id uint) (bool, error)
 }
@@ -146,7 +145,6 @@ func (u *user) Profile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	status, user, err := u.UserProfile(r.Context(), id)
-	fmt.Println(status, err)
 	if err != nil {
 		u.loger.Error.Println(err)
 		w.WriteHeader(status)
@@ -174,7 +172,7 @@ func (u *user) Follow(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(status)
 }
 
-func(u *user) HandleFollowRequestResponse(w http.ResponseWriter, r *http.Request) {
+func (u *user) HandleFollowRequestResponse(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
@@ -185,16 +183,39 @@ func(u *user) HandleFollowRequestResponse(w http.ResponseWriter, r *http.Request
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(entity.ErrorResponse{Error: "Invalid request body"})
 	}
-	status, err:= u.processRequestResponse(r.Context(), notf) 
+	status, err := u.processRequestResponse(r.Context(), notf)
 	if err != nil {
 		w.WriteHeader(status)
 		u.loger.Error.Println(err)
 		json.NewEncoder(w).Encode(entity.ErrorResponse{Error: err.Error()})
 		return
 	}
-	w.WriteHeader(status)	
+	w.WriteHeader(status)
 }
 
-func (u *user) Followers(w http.ResponseWriter, r *http.Request) {
+func (u *user) FollowersAndFollowed(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
 
+	target := r.URL.Query().Get("userid")
+	id, err := strconv.Atoi(target)
+	if err != nil || id <= 0 {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(entity.ErrorResponse{Error: "Invalid user ID"})
+		return
+	}
+	status, follows, err := u.FollowersAndFollowedService(r.Context(), id)
+	if err != nil {
+		u.loger.Error.Println(err)
+		if status == http.StatusBadRequest {
+			json.NewEncoder(w).Encode(entity.ErrorResponse{Error: "invalid user ID"})
+		}
+		w.WriteHeader(status)
+		return
+	}
+
+	w.WriteHeader(status)
+	json.NewEncoder(w).Encode(follows)
 }
