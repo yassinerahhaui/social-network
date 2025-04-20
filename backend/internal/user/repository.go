@@ -296,7 +296,7 @@ func (u *user) isFollowingEither(follower, followed int) (bool, error) {
 	return exists, nil
 }
 
-func (u *user) FollowRepository(followerId, followedId int) error {
+func (u *user) FollowRepository(followerId, followedId int) (bool, error) {
 	// Check if the follow relationship already exists
 	queryCheck := `SELECT 1 FROM follows WHERE follower_id = $1 AND followed_id = $2`
 	var exists int
@@ -306,20 +306,38 @@ func (u *user) FollowRepository(followerId, followedId int) error {
 		queryDelete := `DELETE FROM follows WHERE follower_id = $1 AND followed_id = $2`
 		_, err = u.db.Exec(queryDelete, followerId, followedId)
 		if err != nil {
-			return fmt.Errorf("failed to unfollow: %w", err)
+			return false, fmt.Errorf("failed to unfollow: %w", err)
 		}
-		return nil
+		return false, nil
 	} else if err != sql.ErrNoRows { // Any other error (DB issue)
-		return fmt.Errorf("database error: %w", err)
+		return false, fmt.Errorf("database error: %w", err)
 	}
 
 	// Row does not exist → Follow (insert)
 	queryInsert := `INSERT INTO follows (follower_id, followed_id) VALUES ($1, $2)`
 	_, err = u.db.Exec(queryInsert, followerId, followedId)
 	if err != nil {
-		return fmt.Errorf("failed to follow: %w", err)
+		return false, fmt.Errorf("failed to follow: %w", err)
 	}
-	return nil
+	return true, nil
+}
+
+func (u *user) CreateFollowNotification(ctx context.Context, senderId, receiverId int) (int, error) {
+	query:= `INSERT INTO notification (sender_id, receiver_id, type) 
+	VALUES (?, ?, ?)`
+	stmt, err:= u.db.PrepareContext(ctx, query)
+	if err != nil {
+		return 0, err
+	}
+	res, err:= stmt.ExecContext(ctx, senderId, receiverId, entity.FollowingNotification)
+	if err != nil {
+		return 0, err
+	}
+	id, err := res.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+	return int(id), nil
 }
 
 // need some changes to follow up with the macro image
@@ -391,6 +409,8 @@ func (u *user) GetFollowing(ctx context.Context, id int) ([]entity.User, error) 
 
 	return followers, nil
 }
+
+
 
 // this function is used to follow user
 // func (r *user) Follow(follower, following uint) error {}

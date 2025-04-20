@@ -97,17 +97,25 @@ func (u *user) FollowService(ctx context.Context, followedID int) (int, error) {
 	}
 	if user.Status == entity.PrivateUser {
 		// create notification in data base 
+		id, err := u.CreateFollowNotification(ctx, userId, int(user.ID))
+		if err != nil {
+			return http.StatusInternalServerError, err
+		}
+		print(id)
 		// notify the user by websocket
 		return http.StatusOK, nil
 	}
-    err = u.FollowRepository(userId, followedID)
+    notify, err := u.FollowRepository(userId, followedID)
     if err != nil {
         return http.StatusInternalServerError, err
     }
-    // go u.hub.SendMessage(websocket.Message{
-    //     UserID: userId,
-    //     Text:   fmt.Sprintf("%d started following %d", userId, followedID),
-    // })
+	if notify {
+		// go u.hub.SendMessage(websocket.Message{
+		//     UserID: userId,
+		//     Text:   fmt.Sprintf("%d started following %d", userId, followedID),
+		// })
+	}
+
     return http.StatusOK, nil
 }
 
