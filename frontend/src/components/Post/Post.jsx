@@ -6,24 +6,32 @@ import likes from '@/assets/icons/like.svg'
 import comment from '@/assets/icons/comment.svg'
 import Image from 'next/image';
 import PostLike from '../PostLike/PostLike'
+import Link from 'next/link'
 
-const Post = ({data}) => {
+const Post = ({ data }) => {
     return (
         <article className={styles.card}>
             <div className={styles.card_header}>
                 {/* avatar - username - creation_date */}
-                <Image width={100} height={100} alt='avatar' src={avatar} className={styles.post_avatar} />
+                <Link href={`/profile/yrahhaou`}>
+                    <Image width={100} height={100} alt='avatar' src={avatar} className={styles.post_avatar} />
+                </Link>
                 <div className="">
-                    <h4 className={styles.post_username}>{data.username}</h4>
+                    <Link href={`/profile/yrahhaou`}>
+                        <h4 className={styles.post_username}>{data.username}</h4>
+                    </Link>
                     <span className={styles.post_created_at}>{data.created_at}</span>
                 </div>
             </div>
             <div className={styles.card_body}>
                 {/* text - image - reactions_len - comments_len */}
-                <p className={styles.post_text}>{data.content}</p>
+                <p className={data.image.length ? styles.post_text : styles.post_text2}>{data.content}</p>
                 {/* <img src="" className={styles.post_image} alt="post image" /> */}
                 <br />
-                <Image width={500} height={500} alt='post' src={postImage} className={styles.post_image} />
+                {data.image.length > 0 ? 
+                <Image width={600} height={600} alt='post' src={postImage} className={styles.post_image} />: 
+                ''}
+                
                 <div className={styles.postInfo}>
                     <div className={styles.post_reactions_len}>
                         <Image src={likes} width={24} height={24} alt='likes' className={styles.postLikesSvg} />
@@ -39,7 +47,7 @@ const Post = ({data}) => {
                 {/* add_reaction - add_comment */}
                 <PostLike data={data} />
                 <button className={styles.addComment}>
-                <Image src={comment} width={20} height={20} alt='likes' className={styles.button} />
+                    <Image src={comment} width={20} height={20} alt='likes' className={styles.button} />
                     Comment</button>
             </div>
         </article>

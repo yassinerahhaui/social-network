@@ -20,7 +20,6 @@ func secureHeaders(next http.Handler) http.Handler {
 
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
 
-
 		// Handle preflight OPTIONS request
 		if r.Method == http.MethodOptions {
 			w.WriteHeader(http.StatusOK)
@@ -58,6 +57,11 @@ func (app *App) recoverPanic(next http.Handler) http.Handler {
 			// Use the builtin recover function to check if there has been a
 			// panic or not. If there has...
 			if err := recover(); err != nil {
+				//  Avoid writing if connection is hijacked
+				if _, ok := w.(http.Hijacker); ok {
+					app.Loger.Error.Println("RecoverPanic: connection hijacked, skipping WriteHeader")
+					return
+				}
 				// Set a "Connection: close" header on the response.
 				w.Header().Set("Connection", "close")
 				// Call the app.serverError helper method to return a 500

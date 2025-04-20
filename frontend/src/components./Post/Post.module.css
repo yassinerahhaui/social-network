@@ -1,0 +1,118 @@
+.card {
+    width: 100%;
+    background-color: var(--color-dark);
+    margin: 20px auto;
+    border-radius: 8px;
+    border: 2px solid #191919;
+}
+.card_header {
+    width: 100%;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.post_avatar {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin: 0 10px;
+}
+
+.post_username {
+    color: #ddd;
+}
+
+.post_created_at {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--light-gray);
+}
+
+.card_body {
+    width: 100%;
+    height: max-content;
+    overflow-x: hidden;
+    padding-top: 10px;
+}
+
+.post_text {
+    white-space: pre-wrap;
+}
+
+.post_image {
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
+    max-height: 800px;
+}
+
+.postInfo {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+}
+
+.post_reactions_len {
+    display: flex;
+    height: 30px;
+    align-items: center;
+    
+}
+.postLikesNum {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ddd;
+}
+
+.postLikesSvg {
+    background-color: var(--color-blue);
+    border-radius: 50%;
+    padding: 5px;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.postCommentsText {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--light-gray);
+    margin: 0 5px;
+}
+
+.postCommentsNum {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ddd;
+}
+
+.card_footer {
+    width: 100%;
+    height: max-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+}
+.addComment {
+    margin: 0 10px;
+    background-color: transparent;
+    color: #ddd;
+    font-size: 14px;
+    font-weight: 600;
+    width: 50%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+
+}
+.addComment:hover {
+    background-color: #3b3b3bcb;
+}

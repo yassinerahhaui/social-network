@@ -1,49 +1,41 @@
 package main
 
-// const chatAPI = "/ping"
+// import (
+// 	"net/http"
+// 	"net/url"
+// 	"strings"
+// 	"testing"
 
-// func TestChat(t *testing.T) {
+// 	"github.com/gorilla/websocket"
+// )
 
-// 	/*_________________THE FIRST STEP IS TO LOGIN_______________*/
-// 	t.Run("Loging For Group Test", func(t *testing.T) {
-
-// 		reqBody := struct {
-// 			Nickname string `json:"nickname"`
-// 			Password string `json:"password"`
-// 		}{
-// 			Nickname: existNeckName,
-// 			Password: validPassword,
-// 		}
-
-// 		jsonBody, err := json.Marshal(reqBody)
-// 		if err != nil {
-// 			t.Fatal(err)
-// 		}
-// 		code, _, _ := ts.postJSON(t, "/api/login", jsonBody)
-// 		assert.Equal(t, code, http.StatusOK)
-// 	})
-// 	/*___________MAKE A TEST TABLE OF ALL POSSIBLE CASES_________*/
-// 	tests := []struct {
-// 		name     string
-// 		wantCode int
-// 	}{
-// 		{
-// 			name:     "User Group",
-// 			wantCode: http.StatusOK,
-// 		},
+// func mustParseURL(raw string) *url.URL {
+// 	u, err := url.Parse(raw)
+// 	if err != nil {
+// 		panic(err)
 // 	}
-// 	for _, tt := range tests {
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			reqBody := struct {
-// 			}{}
+// 	return u
+// }
 
-// 			jsonBody, err := json.Marshal(reqBody)
-// 			if err != nil {
-// 				t.Fatal(err)
-// 			}
+// func TestWebSocket(t *testing.T) {
+// 	// Log in and capture cookies
+// 	t.Run("Loging For Posts Test", ts.login)
 
-// 			code, _, _ := ts.postJSON(t, chatAPI, jsonBody)
-// 			assert.Equal(t, code, tt.wantCode)
-// 		})
+// 	// get login cookies
+// 	cookies := ts.Client().Jar.Cookies(mustParseURL(ts.URL))
+
+// 	// build request header with cookies
+// 	header := http.Header{}
+// 	for _, c := range cookies {
+// 		header.Add("Cookie", c.Name+"="+c.Value)
 // 	}
+// 	header.Set("Origin", "http://localhost:3000")
+
+// 	u := "ws" + strings.TrimPrefix(ts.URL, "http") + "/api/ws"
+// 	dialer := websocket.Dialer{}
+// 	conn, _, err := dialer.Dial(u, header)
+// 	if err != nil {
+// 		t.Fatalf("WebSocket connect failed: %v", err)
+// 	}
+// 	defer conn.Close()
 // }

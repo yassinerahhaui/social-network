@@ -26,8 +26,8 @@ func ping(w http.ResponseWriter, r *http.Request) {
 }
 
 func NewTestApplication() (*App, *config.Conf) {
-	//loger := loger.NewTestLogger()
-	loger := loger.NewLogger()
+	loger := loger.NewTestLogger()
+	//loger := loger.NewLogger()
 
 	cfg, err := config.NewConfig()
 	if err != nil {

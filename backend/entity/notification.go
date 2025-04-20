@@ -5,18 +5,23 @@ type Notification struct {
 	Type int `json:"type"`
 	GroupId int `json:"group_id"`
 	SenderId int `json:"sender_id"`
+	ReceiverID int `json:"receiver_id"`
+	EventID int `json:"event_id"`
 	Message string `json:"message"`
 	Accepted bool `json:"accepted"`
 }
 
 const (
 	//notification answer
-	NotificationWithoutAnswer = 0
-	NotificationAccepted = 1
-	NotificationNotAccepted = 2
-	//type of notification
-	FollowingNotification = 0
-	EventNotification = 1
-	GroupInvitationNotification = 2
-	GroupParticipationNotification = 3
+	NotificationWithoutAnswer =  iota
+	NotificationAccepted 
+	NotificationNotAccepted 
+)
+
+const (
+		//type of notification
+		FollowingNotification = iota
+		EventNotification 
+		GroupInvitationNotification 
+		GroupParticipationNotification 
 )

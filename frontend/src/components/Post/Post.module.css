@@ -41,11 +41,22 @@
     white-space: pre-wrap;
 }
 
+.post_text2 {
+    white-space: pre-wrap;
+    font-size: 25px;
+    font-family: var(--font1);
+    font-weight: 600;
+    /* background-color: var(--color-blue2); */
+    padding: 20px 30px;
+    text-align: center;
+}
+
 .post_image {
     max-width: 100%;
+    max-height: min-content;
     margin: 0 auto;
     display: block;
-    max-height: 800px;
+    
 }
 
 .postInfo {

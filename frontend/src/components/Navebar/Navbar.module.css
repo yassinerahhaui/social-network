@@ -1,0 +1,132 @@
+.navbar {
+    width: 100%;
+    height: 80px;
+    background-image: linear-gradient(to right, var(--color-blue2), var(--color-blue));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 50px;
+}
+
+.navbar_start {
+    width: calc(100% / 3);
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.pageIcon,
+.logo {
+    filter: drop-shadow(0 0 2px black);
+}
+
+.pageIcon:hover {
+    filter: drop-shadow(0 0 2px var(--color-red));
+}
+
+.menu {
+    width: calc(100% - (100% / 3));
+    height: 100%;
+    display: flex;
+}
+
+.navbar_middle {
+    width: calc(100% / 2);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.navbar_end {
+    width: calc(100% / 2);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 20px;
+}
+
+.bergerMenu {
+    display: none;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.bergerMenuIcon {
+    filter: drop-shadow(0 0 2px black);
+}
+
+.closeBtn {
+    display: none;
+    background-color: transparent;
+    border: none;
+    margin: 20px;
+    margin-left: auto;
+    cursor: pointer;
+}
+
+.pageName {
+    display: none;
+}
+
+@media(max-width: 960px) {
+    .menu {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 300px;
+        max-width: 100%;
+        height: 100vh;
+        background-color: var(--color-dark2);
+        z-index: 1100;
+        box-shadow: 0 0 4px var(--color-dark), 0 0 4px var(--color-dark);
+    }
+
+    .closeBtn {
+        display: block;
+    }
+
+    .link {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: max-content;
+        padding: 10px;
+        border-bottom: 1px solid #ffffff86;
+    }
+
+    /* .link:hover {
+        background-color: var(--color-blue);
+    } */
+    .pageIcon:hover {
+        filter: none;
+    }
+
+    .pageName {
+        display: block;
+        margin: 0 10px;
+        font-family: var(--font1);
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .bergerMenu {
+        display: block;
+    }
+
+    .navbar_middle {
+        display: block;
+        width: 100%;
+        height: max-content;
+    }
+
+    .navbar_end {
+        display: block;
+        width: 100%;
+        height: max-content;
+    }
+}

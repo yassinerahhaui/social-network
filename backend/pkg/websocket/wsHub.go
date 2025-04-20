@@ -1,15 +1,12 @@
 package websocket
 
 type Hub struct {
-	broadcast  chan []byte
-	register   chan *client
-	unregister chan *client
+	Ws         *WsManager
+	Broadcast  chan []byte
+	Register   chan *Client
+	Unregister chan *Client
 }
 
 func NewHub() *Hub {
 	return &Hub{}
-}
-
-func (h *Hub) Insert() {
-
 }

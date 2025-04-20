@@ -1,0 +1,18 @@
+.setLike {
+    margin: 0 10px;
+    background-color: transparent;
+    color: #ddd;
+    font-size: 14px;
+    font-weight: 600;
+    width: 50%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+
+}
+.setLike:hover {
+    background-color: #3b3b3bcb;
+}

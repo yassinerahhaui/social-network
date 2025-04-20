@@ -71,8 +71,8 @@ func (app *App) createRoutes() []Route {
 		},
 		/*group handlers*/
 		{
-			Path:    "/api/user_groups",
-			handler: app.GetGroups,
+			Path:    "/api/user/groups",
+			handler: app.GetUserGroups,
 			Role:    User,
 		},
 		{
@@ -91,8 +91,39 @@ func (app *App) createRoutes() []Route {
 			Role:    User,
 		},
 		{
+			Path:    "/api/group/members",
+			handler: app.GetGroupMembers,
+			Role:    User,
+		},
+		{
+			Path: "/api/group/invite/response",
+			handler: app.InvitationResponse,
+			Role:    User,
+		},
+		{
+			Path: "/api/group/invite/request",
+			handler: app.InviteToJoinGroup,
+			Role:    User,
+		},
+		{
+			Path: "/api/group/join/request",
+			handler: app.RequestToJoinGroup,
+			Role:    User,
+		},
+		{
+			Path: "/api/group/join/response",
+			handler: app.RequestToJoinResponse,
+			Role:		User,
+		},
+		/*post handlers*/
+		{
 			Path:    "/api/posts",
 			handler: app.GetPosts,
+			Role:    User,
+		},
+		{
+			Path:    "/api/ws",
+			handler: app.WebSocket,
 			Role:    User,
 		},
 		// {

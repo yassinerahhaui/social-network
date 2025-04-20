@@ -16,7 +16,7 @@ import (
 
 func (r *user) GetUserProfileById(ctx context.Context, targetId int) (entity.User, error) {
 	var user entity.User
-	requesterId := ctx.Value(entity.ContextID)
+	requesterId := ctx.Value(entity.ContextID).(int)
 	query := `
 		SELECT 
 			u.id, u.nickname, u.email, u.password, u.avatar, 

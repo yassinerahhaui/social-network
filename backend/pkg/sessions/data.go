@@ -257,6 +257,18 @@ func (s *SessionManager) GetInt(ctx context.Context, key string) int {
 	return i
 }
 
+// GetString returns the string value for a given key from the session data.
+// The zero value for a string ("") is returned if the key does not exist or the
+// value could not be type asserted to a string.
+func (s *SessionManager) GetString(ctx context.Context, key string) string {
+	val := s.Get(ctx, key)
+	str, ok := val.(string)
+	if !ok {
+		return ""
+	}
+	return str
+}
+
 /*_________________________________________Helper functions___________________________________*/
 func (s *SessionManager) addSessionDataToContext(ctx context.Context, sd *sessionData) context.Context {
 	return context.WithValue(ctx, s.contextKey, sd)

@@ -14,6 +14,12 @@ type Group struct {
 	Posts       []Post `json:"posts"`
 }
 
+type Invitation struct {
+	GroupId int `json:"group_id"`
+	InviterID int `json:"inviter_id"`
+	InvitedID int `json:"invited_id"`
+}
+
 const (
 	RealGroup     = 0
 	ChatGroup     = 1
