@@ -127,15 +127,12 @@ func (u *user) FollowersService(ctx context.Context, followedId int) error {
 func (u *user) processRequestResponse(ctx context.Context, notification entity.Notification) (int, error) {
 	userId := ctx.Value(entity.ContextID).(int)
 	// this user is contained in the group
-	exist, err := u.GroupContainsMember(notification.GroupId, userId)
-	if !exist || err != nil {
-		if err!= nil {
-			return http.StatusInternalServerError, err
-		}
+	if notification.ReceiverID != userId {
+
 		return http.StatusForbidden, errors.New("forbidden access to this action")
 	}
 	if notification.Accepted {
-		err = u.FollowRepository(notification.SenderId, userId)
+		_, err := u.FollowRepository(notification.SenderId, userId)
 		if err != nil {
 			return http.StatusInternalServerError, err
 		}
