@@ -300,14 +300,12 @@ npm run build
 
 ## Team
 
-| Member | Handle | Role | Availability |
-|---|---|---|---|
-| Ibrahim El Harraq | `#ielharra` | Full-Stack Developer | Unavailable |
-| Yassine Rahhaoui | `#yrahhaou` | Basic Developer | Available in 8 days |
-| Yasyn Nait Edderhm | `#ynaitedd` | Full-Stack Developer | Unavailable |
-| Omar Ait Benhammou | `#oaitbenh` | Confirmed Developer | Unavailable |
-| Mohamed El-Fihry | `#melfihry` | Confirmed Developer | Unavailable |
-| Oussama Benali | `#obenali` | Confirmed Developer | Not specified |
+- Ibrahim El Harraq — `#ielharra`
+- Yassine Rahhaoui — `#yrahhaou`
+- Yasyn Nait Edderhm — `#ynaitedd`
+- Omar Ait Benhammou — `#oaitbenh`
+- Mohamed El-Fihry — `#melfihry`
+- Oussama Benali — `#obenali`
 
 ## Project objectives
 
